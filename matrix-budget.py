@@ -19,12 +19,12 @@ MAGENTA= "\033[95m"
 WHITE  = "\033[97m"
 DIM    = "\033[2m"
 
-# ── helper: draw a horizontal line ──
+#  helper: draw a horizontal line
 def line(char="─", width=60, color=CYAN):
     print(f"{color}{char * width}{RESET}")
 
 
-# ── helper: print a section header ──
+#  helper: print a section header
 def header(title):
     print()
     line("═", 60, CYAN)
@@ -32,7 +32,7 @@ def header(title):
     line("═", 60, CYAN)
 
 
-# ── helper: get a positive integer from the user ──
+#  helper: get a positive integer from the user
 def get_positive_int(prompt):
     """
     I keep asking until the user gives me a whole
@@ -49,7 +49,7 @@ def get_positive_int(prompt):
             print(f"  {RED}⚠  That is not a valid number. Try again.{RESET}")
 
 
-# ── helper: get a positive float from the user ──
+#  helper: get a positive float from the user
 def get_positive_float(prompt):
     """
     I use this whenever I need a monetary amount.
@@ -66,7 +66,7 @@ def get_positive_float(prompt):
             print(f"  {RED}⚠  Please enter a valid number (e.g. 250.50).{RESET}")
 
 
-# ── helper: get a non-empty category name ──
+#  helper: get a non-empty category name
 def get_category_name(prompt):
     """
     I make sure the user does not leave a category name blank.
@@ -137,3 +137,43 @@ def build_expense_matrix(categories, weeks):
         print()
 
     return E
+
+#  STEP 5 – matrix multiplication  E × W = T
+
+def compute_totals(E):
+    """
+    I create a weight vector W filled with 1s.
+    When I multiply E × W the result T gives me
+    the total spending per category (summing all weeks).
+
+    Dimensions check:
+      E  →  (n_categories × n_weeks)
+      W  →  (n_weeks      × 1     )
+      T  →  (n_categories × 1     )
+
+    If the inner dimensions do not match numpy will
+    raise an error automatically, but I also validate
+    manually to give the user a clear message.
+    """
+    _, n_weeks = E.shape
+
+    # I create the ones vector W
+    W = np.ones((n_weeks, 1))
+
+    # Dimension compatibility check (just to be explicit)
+    if E.shape[1] != W.shape[0]:
+        raise ValueError(
+            f"Matrix multiplication error: E has {E.shape[1]} columns "
+            f"but W has {W.shape[0]} rows. Dimensions are incompatible."
+        )
+
+    # I perform the actual matrix multiplication here
+    T = E @ W          # shape: (n_categories, 1)
+    return T, W
+
+#  STEP 6 – get income and compute balance
+
+def get_income():
+    header("Step 4 │ Your Income")
+    income = get_positive_float("  Enter your total income for this period (Rs): ")
+    return income
