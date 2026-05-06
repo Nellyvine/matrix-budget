@@ -104,3 +104,36 @@ def get_categories():
         categories.append(name)
 
     return categories
+
+#  STEP 3 – collect week count
+
+def get_weeks():
+    header("Step 2 │ Time Period")
+    weeks = get_positive_int("  How many weeks do you want to track? : ")
+    return weeks
+
+#  STEP 4 – build the expense matrix E
+
+def build_expense_matrix(categories, weeks):
+    """
+    I build matrix E where:
+      - each ROW    = one spending category
+      - each COLUMN = one week
+    So E has shape  (num_categories × num_weeks).
+    """
+    header("Step 3 │ Enter Expenses")
+    print(f"  {DIM}Enter the amount you spent in each category for each week.{RESET}")
+    print()
+
+    n_cat  = len(categories)
+    # I initialise the matrix with zeros first
+    E = np.zeros((n_cat, weeks))
+
+    for i, cat in enumerate(categories):
+        print(f"  {BLUE}{BOLD}► {cat}{RESET}")
+        for j in range(weeks):
+            prompt = f"      Week {j + 1} expense (Rs): "
+            E[i][j] = get_positive_float(prompt)
+        print()
+
+    return E
