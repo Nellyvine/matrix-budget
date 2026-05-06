@@ -77,3 +77,30 @@ def get_category_name(prompt):
             print(f"  {RED}⚠  Category name cannot be empty.{RESET}")
         else:
             return name
+
+#  STEP 1 – welcome banner
+
+def show_banner():
+    print()
+    line("═", 60, MAGENTA)
+    print(f"{BOLD}{MAGENTA}{'Matrix-Based Budget Analysis System':^60}{RESET}")
+    print(f"{DIM}{'Linear Algebra Application  |  Matrix Multiplication':^60}{RESET}")
+    line("═", 60, MAGENTA)
+    print()
+    print(f"  {WHITE}This program uses matrix multiplication to compute{RESET}")
+    print(f"  {WHITE}your spending totals across categories and weeks.{RESET}")
+    print()
+
+#  STEP 2 – collect category info
+
+def get_categories():
+    header("Step 1 │ Categories")
+    n = get_positive_int("  How many spending categories do you have? : ")
+
+    categories = []
+    print()
+    for i in range(n):
+        name = get_category_name(f"  Name of category {i + 1}             : ")
+        categories.append(name)
+
+    return categories
