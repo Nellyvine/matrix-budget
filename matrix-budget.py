@@ -177,3 +177,84 @@ def get_income():
     header("Step 4 │ Your Income")
     income = get_positive_float("  Enter your total income for this period (Rs): ")
     return income
+
+#  STEP 7 – display results
+
+def display_results(categories, E, W, T, income, weeks):
+    header("Results │ Budget Analysis Report")
+
+    #  7a: show the raw expense matrix
+    print(f"  {BOLD}{WHITE}Expense Matrix  E  ({len(categories)} × {weeks}){RESET}")
+    print(f"  {DIM}Rows = categories  |  Columns = weeks{RESET}")
+    print()
+
+    # Column headers
+    col_header = f"  {'Category':<18}" + "".join(
+        f"{'Week ' + str(j + 1):>10}" for j in range(weeks)
+    )
+    print(f"{CYAN}{col_header}{RESET}")
+    line("─", 60, DIM)
+
+    for i, cat in enumerate(categories):
+        row_str = f"  {cat:<18}"
+        for j in range(weeks):
+            row_str += f"{E[i][j]:>10.2f}"
+        print(f"{WHITE}{row_str}{RESET}")
+
+    print()
+
+    #  7b: show the weight vector W
+    print(f"  {BOLD}{WHITE}Weight Vector  W  (all 1s → sums across all weeks){RESET}")
+    w_display = "  W = [ " + "  ".join(str(int(w[0])) for w in W) + " ]ᵀ"
+    print(f"{CYAN}{w_display}{RESET}")
+    print()
+
+    #  7c: show T = E × W  per category
+    line("─", 60, CYAN)
+    print(f"  {BOLD}{WHITE}Category Totals  T = E × W{RESET}")
+    line("─", 60, CYAN)
+
+    total_spent = 0.0
+    for i, cat in enumerate(categories):
+        cat_total = T[i][0]
+        total_spent += cat_total
+        bar_len = int((cat_total / (income or 1)) * 30)
+        bar = "█" * min(bar_len, 30)
+        print(
+            f"  {GREEN}{cat:<18}{RESET} "
+            f"{WHITE}Rs {cat_total:>10.2f}{RESET}  "
+            f"{BLUE}{bar}{RESET}"
+        )
+
+    #  7d: summary
+    print()
+    line("─", 60, CYAN)
+    balance = income - total_spent
+    balance_color = GREEN if balance >= 0 else RED
+    balance_label = "Surplus ✔" if balance >= 0 else "Deficit ✘"
+
+    print(f"  {WHITE}{'Total Income':<24}Rs {income:>10.2f}{RESET}")
+    print(f"  {WHITE}{'Total Spent':<24}Rs {total_spent:>10.2f}{RESET}")
+    print(
+        f"  {balance_color}{BOLD}{'Balance  (' + balance_label + ')':<24}"
+        f"Rs {balance:>10.2f}{RESET}"
+    )
+    line("─", 60, CYAN)
+
+    #  7e: quick analysis message
+    print()
+    pct = (total_spent / income * 100) if income > 0 else 0
+    print(f"  {DIM}You spent {pct:.1f}% of your income this period.{RESET}")
+
+    if balance < 0:
+        print(f"  {RED}⚠  You have exceeded your income by Rs {abs(balance):.2f}.{RESET}")
+    elif pct > 80:
+        print(f"  {YELLOW}⚠  You are spending more than 80% of your income.{RESET}")
+    else:
+        print(f"  {GREEN}✔  Your spending looks manageable. Keep it up!{RESET}")
+
+    print()
+    line("═", 60, MAGENTA)
+    print(f"{BOLD}{MAGENTA}{'End of Report':^60}{RESET}")
+    line("═", 60, MAGENTA)
+    print()
