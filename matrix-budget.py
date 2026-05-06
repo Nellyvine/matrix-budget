@@ -258,3 +258,32 @@ def display_results(categories, E, W, T, income, weeks):
     print(f"{BOLD}{MAGENTA}{'End of Report':^60}{RESET}")
     line("═", 60, MAGENTA)
     print()
+
+#  MAIN – I tie everything together here
+
+def main():
+    show_banner()
+
+    try:
+        # I collect all the inputs one section at a time
+        categories = get_categories()
+        weeks      = get_weeks()
+        E          = build_expense_matrix(categories, weeks)
+
+        # I perform the matrix multiplication E × W = T
+        T, W = compute_totals(E)
+
+        # I get the income last so the user has context
+        income = get_income()
+
+        # I show the full report
+        display_results(categories, E, W, T, income, weeks)
+
+    except KeyboardInterrupt:
+        # I handle Ctrl+C gracefully so the terminal does not look broken
+        print(f"\n\n  {YELLOW}Program interrupted by user. Goodbye!{RESET}\n")
+
+
+# I only run main() when this file is executed directly
+if __name__ == "__main__":
+    main()
