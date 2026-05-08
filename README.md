@@ -40,6 +40,12 @@ The program will guide you through:
 
 Results are displayed as a formatted report showing the expense matrix, category totals, and remaining balance.
 
+## Sample Output
+
+![Example Output](https://i.imgur.com/EmhdlIZ.png)
+![Example Output](https://i.imgur.com/qjbq5Jt.png)
+![Example Output](https://i.imgur.com/SfhtF7M.png)
+
 ## Project Structure
 
 ```
